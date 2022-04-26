@@ -4,7 +4,7 @@
 ## lukas.schoenmann@students.boku.ac.at
 ## PDF-Merger using Latex, runs in Linux terminal
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 if __name__ == '__main__':
 
@@ -20,8 +20,8 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--pages', help='Selected pages and layout modification for each file; default is all pages for every file \n   any number of pages can be selected, separated by commas "," \n   "-" selects all pages, or a range; can also be open \n   "_" creates a blank page \nprecede with optional layout parameters:\n   "L" for landscape orientation\n   "F" to fit the paper size\n   "N" to avoid automatic scaling', type=str, nargs='*', required=False, default="default")
     parser.add_argument('-a', '--path', help='Path to input directory; default is current directory "./"', type=str, default="./", required=False)
     parser.add_argument('-n', '--nup', help='Dimensions of the number of pages per sheet; pass for each file in delimited format using ","', type=str, nargs='?', required=False, default="1x1")
-    parser.add_argument('-b', '--build', help='Build the latex file; default is true', required=False, action='store_false')
-    parser.add_argument('-c', '--clean', help='Remove all Latex files created after building; default is true', required=False, action='store_false')
+    parser.add_argument('-b', '--nobuild', help='Build the latex file; default is true', required=False, action='store_false')
+    parser.add_argument('-c', '--noclean', help='Remove all Latex files created after building; default is true', required=False, action='store_false')
     parser.add_argument('-o', '--output', help='Output file name (including filename extension); default is "pdf-merger.pdf"', type=str, nargs='?', required=False, default="pdf-merger.pdf")
     parser.add_argument('-t', '--texname', help='Name of the latex .tex file (excluding filename extension); default is "pdf-merger.tex"', type=str, nargs='?', required=False, default="pdf-merger")
     args = parser.parse_args()
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     import subprocess
 
-    if args.build:
+    if args.nobuild:
         output = args.output
         # build .tex file
         process = subprocess.Popen(["pdflatex", texname+".tex"])
@@ -124,7 +124,7 @@ if __name__ == '__main__':
         # move to output directory and overwrite if necessary
         os.replace(texname+".pdf", os.path.join("pdfmerger-output", output))
 
-    if args.clean:
+    if args.noclean:
         # remove all files created during build
         os.remove(texname+".tex")
         os.remove(texname+".log")
